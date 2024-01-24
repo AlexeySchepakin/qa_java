@@ -2,47 +2,52 @@ package com.example;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
 
 import java.util.List;
 
-@RunWith(MockitoJUnitRunner.class)
 public class LionTest {
 
     @Mock
     private Feline feline;
-
-    private Lion lion;
+    private Lion lionMale;
+    private Lion lionFemale;
 
     @Before
     public void setUp() throws Exception {
-        lion = new Lion("Самец", feline);
+        MockitoAnnotations.initMocks(this);
+        lionMale = new Lion("Самец", feline);
+        lionFemale = new Lion("Самка", feline);
     }
 
     @Test
-    public void testDoesHaveMane() {
-        assertTrue(lion.doesHaveMane());
+    public void testLionDoesHaveManeMale() {
+        assertTrue(lionMale.doesHaveMane());
+    }
+
+    @Test
+    public void testLionDoesHaveManeFemale() {
+        assertFalse(lionFemale.doesHaveMane());
     }
 
     @Test(expected = Exception.class)
-    public void testLionWithInvalidSex() throws Exception {
+    public void testLionInvalidSex() throws Exception {
         new Lion("Неверный пол", feline);
     }
 
     @Test
-    public void testGetKittens() {
+    public void testLionGetKittens() {
         when(feline.getKittens()).thenReturn(3);
-        assertEquals(3, lion.getKittens());
+        assertEquals(3, lionMale.getKittens());
     }
 
     @Test
-    public void testGetFood() throws Exception {
+    public void testLionGetFood() throws Exception {
         List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
         when(feline.getFood("Хищник")).thenReturn(expectedFood);
-        assertEquals(expectedFood, lion.getFood());
+        assertEquals(expectedFood, lionMale.getFood());
     }
 }
